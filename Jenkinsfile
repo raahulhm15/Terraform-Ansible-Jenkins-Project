@@ -25,7 +25,7 @@ pipeline {
      steps{
          script {
                 sh ' docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node'
-                sh ' docker push 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node'
+                sh ' docker push 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/nodeimage:latest'
          }
         }
       }
