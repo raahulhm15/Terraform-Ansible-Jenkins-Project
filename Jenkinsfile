@@ -1,7 +1,9 @@
+@Library('github.com/releaseworks/jenkinslib') _
+
 pipeline {
     agent any
     environment {
-        registry = "638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node:alpine"
+        registry = "638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node"
     }
 
     stages {
@@ -15,27 +17,31 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          sh  'docker build -t nodeimage .'
+          dockerImage = docker.build registry
         }
       }
     }
 
     // Uploading Docker images into AWS ECR
     stage('Pushing to ECR') {
-     steps{
-         script {
-                sh ' docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment:latest'
-                sh ' docker tag c7-assignment:latest 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment:latest'
-                sh ' docker push 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment:latest'
-         }
+        steps{
+            script {
+                sh 'docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node '
+                sh 'docker push 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node'
+            }
         }
-      }
+    }
 
     stage('Docker Run') {
      steps{
          script {
-                sh ' ssh -i /home/ubuntu/assignment-c7key.pem ubuntu@54.167.100.63'
-                sh ' docker run -d -p 8080:8080 --rm --name node 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node:alpine'
+             sshagent(credentials : ['aws_ec2']){
+
+                sh 'ssh -o StrictHostKeyChecking=no -i assignment-c7key.pem ubuntu@10.0.2.129'
+
+             }
+                //sh 'ssh -i /login/assignment-c7key.pem ubuntu@10.0.2.129'
+                sh 'docker run -d -p 8081:8080 --rm --name node 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node'
             }
       }
     }
