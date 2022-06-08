@@ -1,5 +1,5 @@
-# C7-Assignment
-C7 DevOps Upgrad Assignment
+# DevOps Project
+DevOps Project
 
 Created AWS services through Terraform code
 
