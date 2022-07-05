@@ -18,7 +18,7 @@ pipeline {
       steps{
         script {
           dockerImage = docker.build registry
-            docker.image('alerts').push(env.GIT_COMMIT)
+           
         }
       }
     }
@@ -27,6 +27,7 @@ pipeline {
     stage('Pushing to ECR') {
         steps{
             script {
+                 docker.image('alerts').push(env.GIT_COMMIT)
                 sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest '
                 
                 sh 'docker push 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest'
