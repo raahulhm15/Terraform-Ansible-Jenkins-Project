@@ -18,6 +18,7 @@ pipeline {
       steps{
         script {
           dockerImage = docker.build registry
+            docker.image('alerts').push(env.GIT_COMMIT)
         }
       }
     }
