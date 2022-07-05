@@ -3,13 +3,13 @@
 pipeline {
     agent any
     environment {
-        registry = "638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node"
+        registry = "334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest"
     }
 
     stages {
         stage('Cloning Git') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/sumeetkhastgir/C7-Assignment.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/raahulhm15/Terraform-Ansible-Jenkins-Project.git']]])
             }
         }
 
@@ -26,8 +26,8 @@ pipeline {
     stage('Pushing to ECR') {
         steps{
             script {
-                sh 'docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node '
-                sh 'docker push 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node'
+                sh 'docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest '
+                sh 'docker push 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest'
             }
         }
     }
@@ -37,11 +37,11 @@ pipeline {
          script {
              sshagent(credentials : ['aws_ec2']){
 
-                sh 'ssh -o StrictHostKeyChecking=no -i assignment-c7key.pem ubuntu@10.0.2.129'
+                sh 'ssh -o StrictHostKeyChecking=no -i assignment-c7key.pem ubuntu@10.0.2.84'
 
              }
-                //sh 'ssh -i /login/assignment-c7key.pem ubuntu@10.0.2.129'
-                sh 'docker run -d -p 8081:8080 --rm --name node 638318277465.dkr.ecr.us-east-1.amazonaws.com/c7-assignment/node'
+                //sh 'ssh -i /login/-i assignment-c7key.pem ubuntu@10.0.2.84'
+                sh 'docker run -d -p 8081:8080  node 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest'
             }
       }
     }
