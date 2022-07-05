@@ -26,8 +26,9 @@ pipeline {
     stage('Pushing to ECR') {
         steps{
             script {
-                sh 'docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject '
-                sh 'docker push 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest'
+                sh 'docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest '
+                
+                sh 'docker push 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest/'
             }
         }
     }
