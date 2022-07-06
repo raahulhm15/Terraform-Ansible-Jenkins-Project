@@ -27,10 +27,10 @@ pipeline {
     stage('Pushing to ECR') {
         steps{
             script {
-                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 334982178958.dkr.ecr.us-east-1.amazonaws.com '
-                sh 'docker build -t sample-app:latest .
-                sh 'docker tag sample-app:latest 334982178958.dkr.ecr.us-east-1.amazonaws.com/sample-app:latest'
-                sh 'docker push 334982178958.dkr.ecr.us-east-1.amazonaws.com/sample-app:latest'
+                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest '
+                sh 'docker build -t upgradproject/latest .
+                sh 'docker tag sample-app:latest 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest'
+                sh 'docker push 334982178958.dkr.ecr.us-east-1.amazonaws.com/upgradproject/latest'
             }
         }
     }
